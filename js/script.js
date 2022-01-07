@@ -53,7 +53,7 @@ class Particle {
     // baseX/Y przechowuje dane dla każdej cząsteczki dla momentu, w którym się pojawia
     this.baseX = this.x;
     this.baseY = this.y;
-    this.density = (Math.random() * 30) + 1
+    this.density = (Math.random() * 110) + 5
     }
   draw(){
     ctx.fillStyle = 'white'
@@ -64,14 +64,28 @@ class Particle {
     ctx.fill();
   }
   update(){
-    //szukam odleglosci myszy od cząsteczki
+    //szukam odleglosci myszy od cząsteczki i dodaje fizyk !!!!!!!!!!!!! 1:25
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
+    let forceDirectionX = dx / distance;
+    let forceDirectionY = dy / distance;
+    let maxDistance = mouse.radius;
+    let force = (maxDistance - distance) / maxDistance;
+    let directioX = forceDirectionX * force * this.density;
+    let directioY = forceDirectionY * force * this.density;
     if (distance < 100){
-      this.size = 2;
+      this.x -= forceDirectionX * 3;
+      this.y -= forceDirectionY * 3;
     } else{
-      this.size = 1.5;
+      if (this.x !== this.baseX){
+        let dx = this.x - this.baseX;
+        this.x -= dx/10;
+      }
+      if (this.y !== this.baseY){
+        let dy = this.y - this.baseY;
+        this.y -= dy/10;
+      }
     }
   }
 }
